@@ -1,0 +1,67 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import Layout from './components/Layout';
+import Dashboard from './pages/Dashboard';
+import Transactions from './pages/Transactions';
+import Reports from './pages/Reports';
+import BankAccounts from './pages/BankAccounts';
+import Landing from './pages/Landing';
+import Login from './pages/Login';
+import Register from './pages/Register';
+
+const ProtectedRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  
+  if (loading) return <div className="flex items-center justify-center min-h-screen">Carregando...</div>;
+  
+  if (!user) return <Navigate to="/landing" />;
+  
+  if (user.subscriptionStatus === 'EXPIRED') {
+      return (
+          <div className="flex items-center justify-center min-h-screen bg-orange-50 flex-col gap-4 p-4 text-center">
+              <h1 className="text-2xl font-bold text-red-600">Período de Teste Expirado</h1>
+              <p className="text-gray-700">Seu período de teste de 3 dias acabou.</p>
+              <p className="text-gray-600">Por favor, entre em contato para atualizar sua assinatura e continuar usando o Finance Manager.</p>
+              <button 
+                onClick={() => window.location.reload()} 
+                className="mt-4 bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
+              >
+                Tentar novamente
+              </button>
+          </div>
+      )
+  }
+
+  return <Layout>{children}</Layout>;
+};
+
+const PublicRoute = ({ children }) => {
+    const { user, loading } = useAuth();
+    if (loading) return null;
+    if (user) return <Navigate to="/" />;
+    return children;
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/landing" element={<PublicRoute><Landing /></PublicRoute>} />
+          <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+          <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+          
+          <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/transactions" element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
+          <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+          <Route path="/bank-accounts" element={<ProtectedRoute><BankAccounts /></ProtectedRoute>} />
+          
+          <Route path="*" element={<Navigate to="/landing" />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
+  );
+}
+
+export default App;

@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 Int             @id @default(autoincrement())
+  email              String          @unique
+  password           String
+  name               String
+  trialStartDate     DateTime        @default(now())
+  subscriptionStatus String          @default("TRIAL") // TRIAL, ACTIVE, EXPIRED, CANCELLED
+  subscriptionPlan   String?         // 'BASIC', 'PRO', 'ENTERPRISE'
+  stripeCustomerId   String?
+  transactions       Transaction[]
+  bankAccounts       BankAccount[]
+  subscriptions      Subscription[]
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+}
+
+model BankAccount {
+  id           Int           @id @default(autoincrement())
+  name         String
+  type         String        // 'CHECKING', 'SAVINGS', 'INVESTMENT', 'CASH', 'OTHER'
+  bankName     String?       // 'Itau', 'Nubank', etc.
+  initialBalance Float       @default(0)
+  color        String?       @default("#f97316") // For UI
+  userId       Int
+  user         User          @relation(fields: [userId], references: [id])
+  transactions Transaction[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Transaction {
+  id            Int          @id @default(autoincrement())
+  description   String
+  amount        Float
+  type          String       // 'INCOME' or 'EXPENSE'
+  category      String
+  date          DateTime
+  userId        Int
+  user          User         @relation(fields: [userId], references: [id])
+  bankAccountId Int?
+  bankAccount   BankAccount? @relation(fields: [bankAccountId], references: [id])
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model Subscription {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  plan      String
+  status    String   // 'ACTIVE', 'PAST_DUE', 'CANCELED'
+  startDate DateTime @default(now())
+  endDate   DateTime?
+  amount    Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
