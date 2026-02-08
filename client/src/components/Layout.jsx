@@ -68,9 +68,12 @@ export default function Layout({ children }) {
           <div className="flex items-center gap-2">
              <img src="/logo.png" alt="Logo" className="w-24 h-24 object-contain" />
           </div>
-          <button onClick={handleLogout} className="text-orange-900">
-            <LogOut className="w-6 h-6" />
-          </button>
+          <div className="flex flex-col items-center">
+            <button onClick={handleLogout} className="text-orange-900">
+              <LogOut className="w-6 h-6" />
+            </button>
+            {user && <span className="text-xs font-medium text-orange-900 mt-1">{user.name}</span>}
+          </div>
         </div>
 
         {/* Mobile Nav (Simple bottom bar or similar? Or just rely on sidebar? For now, mobile users might miss nav if sidebar is hidden. 
