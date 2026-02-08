@@ -61,10 +61,10 @@ export default function Reports() {
 
     if (logoBase64) {
       try {
-        doc.addImage(logoBase64, 'PNG', 14, 10, 54, 54);
+        doc.addImage(logoBase64, 'PNG', 14, 10, 65, 65);
         doc.setFontSize(18);
-        doc.text('Relatório Financeiro', 75, 40);
-        contentStartY = 75;
+        doc.text('Relatório Financeiro', 85, 40);
+        contentStartY = 85;
       } catch (imgError) {
         console.warn("Error adding image to PDF:", imgError);
         doc.setFontSize(18);

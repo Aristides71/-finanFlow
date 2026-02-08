@@ -25,7 +25,7 @@ export default function Layout({ children }) {
       {/* Sidebar */}
       <div className="w-64 bg-gradient-to-b from-orange-200 to-orange-300 shadow-lg hidden md:block text-orange-900 flex flex-col">
         <div className="p-6 flex flex-col items-center gap-2 border-b border-orange-900/10">
-          <img src="/logo.png" alt="Logo" className="w-36 h-36 object-contain" />
+          <img src="/logo.png" alt="Logo" className="w-44 h-44 object-contain" />
           {user && <span className="text-sm font-medium text-orange-900 mt-2">Olá, {user.name}</span>}
         </div>
         
@@ -66,7 +66,7 @@ export default function Layout({ children }) {
         {/* Mobile Header */}
         <div className="md:hidden bg-gradient-to-r from-orange-200 to-orange-300 shadow-sm p-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-             <img src="/logo.png" alt="Logo" className="w-24 h-24 object-contain" />
+             <img src="/logo.png" alt="Logo" className="w-28 h-28 object-contain" />
           </div>
           <div className="flex flex-col items-center">
             <button onClick={handleLogout} className="text-orange-900">
