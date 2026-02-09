@@ -22,6 +22,7 @@ model User {
   transactions       Transaction[]
   bankAccounts       BankAccount[]
   subscriptions      Subscription[]
+  budgets            Budget[]
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
 }
