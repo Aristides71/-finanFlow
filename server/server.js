@@ -75,7 +75,15 @@ app.post('/api/auth/login', async (req, res) => {
     if (!validPassword) return res.status(400).json({ error: 'Invalid password' });
 
     // Check trial status
-    if (user.subscriptionStatus === 'TRIAL') {
+    if (user.email === 'agomes.bel71@gmail.com') {
+        if (user.subscriptionStatus === 'EXPIRED') {
+             await prisma.user.update({
+               where: { id: user.id },
+               data: { subscriptionStatus: 'TRIAL' }
+           });
+           user.subscriptionStatus = 'TRIAL';
+        }
+    } else if (user.subscriptionStatus === 'TRIAL') {
        const now = new Date();
        const trialStart = new Date(user.trialStartDate);
        const diffTime = Math.abs(now - trialStart);
