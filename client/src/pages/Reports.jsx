@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getTransactions, getBudgets } from '../services/api';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -24,6 +24,11 @@ export default function Reports() {
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
+
+  useEffect(() => {
+    generateReport();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const generateReport = async () => {
     setLoading(true);
@@ -433,6 +438,11 @@ export default function Reports() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-700">
                           {budgeted}
+                          <div className="sm:hidden text-xs text-gray-500 mt-1">
+                            Orçado: {t.type === 'EXPENSE' && budgetMap[t.category] !== undefined
+                              ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(budgetMap[t.category]))
+                              : '-'}
+                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-green-600 font-medium">
                           {isIncome ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(amount) : '-'}
@@ -462,7 +472,7 @@ export default function Reports() {
                   
                   return (
                     <tr>
-                      <td colSpan="3" className="px-6 py-4 text-right text-sm font-bold text-gray-900 uppercase tracking-wider">
+                      <td colSpan="4" className="px-6 py-4 text-right text-sm font-bold text-gray-900 uppercase tracking-wider">
                         Saldo Final do Período
                       </td>
                       <td className="px-6 py-4 text-right text-sm font-bold text-green-700">
