@@ -18,7 +18,8 @@ const ProtectedRoute = ({ children }) => {
   
   if (!user) return <Navigate to="/landing" />;
   
-  if (user.subscriptionStatus === 'EXPIRED') {
+  // Bypass expiration check for specific testing email
+  if (user.subscriptionStatus === 'EXPIRED' && user.email !== 'agomes.bel71@gmail.com') {
       return (
           <div className="flex items-center justify-center min-h-screen bg-orange-50 flex-col gap-4 p-4 text-center">
               <h1 className="text-2xl font-bold text-red-600">Período de Teste Expirado</h1>
