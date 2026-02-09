@@ -67,3 +67,25 @@ model Subscription {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Budget {
+  id        Int          @id @default(autoincrement())
+  userId    Int
+  user      User         @relation(fields: [userId], references: [id])
+  name      String
+  startDate DateTime
+  endDate   DateTime
+  items     BudgetItem[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model BudgetItem {
+  id              Int      @id @default(autoincrement())
+  budgetId        Int
+  budget          Budget   @relation(fields: [budgetId], references: [id])
+  category        String
+  allocatedAmount Float
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

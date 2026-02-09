@@ -38,4 +38,9 @@ export const getBankAccounts = () => api.get('/bank-accounts');
 export const createBankAccount = (data) => api.post('/bank-accounts', data);
 export const deleteBankAccount = (id) => api.delete(`/bank-accounts/${id}`);
 
+// Budget Services
+export const getBudgets = () => api.get('/budgets');
+export const createBudget = (data) => api.post('/budgets', data);
+export const getBudgetProgress = (id) => api.get(`/budgets/${id}/progress`);
+
 export default api;

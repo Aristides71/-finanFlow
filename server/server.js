@@ -350,10 +350,83 @@ app.delete('/api/bank-accounts/:id', authenticateToken, async (req, res) => {
     }
 });
 
-// Update transaction to include bankAccountId
-// Need to update the existing POST /api/transactions route to accept bankAccountId
-// I will rewrite the POST route below. Since express executes routes in order, I should replace the old one or ensure this one is defined.
-// Actually, I'll just use SearchReplace to Modify the existing POST route instead of appending here, but since I am appending new routes, let's find the old POST route and replace it.
+app.get('/api/budgets', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const budgets = await prisma.budget.findMany({
+      where: { userId },
+      include: { items: true },
+      orderBy: { createdAt: 'desc' },
+    });
+    res.json(budgets);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/budgets', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { name, startDate, endDate, items } = req.body;
+    const budget = await prisma.budget.create({
+      data: {
+        userId,
+        name,
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
+        items: {
+          create: (items || []).map(i => ({
+            category: i.category,
+            allocatedAmount: parseFloat(i.allocatedAmount || 0),
+          })),
+        },
+      },
+      include: { items: true },
+    });
+    res.json(budget);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/budgets/:id/progress', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const id = parseInt(req.params.id);
+    const budget = await prisma.budget.findUnique({
+      where: { id },
+      include: { items: true },
+    });
+    if (!budget || budget.userId !== userId) {
+      return res.status(403).json({ error: 'Not authorized' });
+    }
+    const transactions = await prisma.transaction.findMany({
+      where: {
+        userId,
+        date: {
+          gte: budget.startDate,
+          lte: budget.endDate,
+        },
+      },
+    });
+    const progress = budget.items.map(item => {
+      const spent = transactions
+        .filter(t => t.type === 'EXPENSE' && t.category === item.category)
+        .reduce((acc, t) => acc + t.amount, 0);
+      return {
+        itemId: item.id,
+        category: item.category,
+        allocatedAmount: item.allocatedAmount,
+        spent,
+        remaining: Math.max(item.allocatedAmount - spent, 0),
+        percent: item.allocatedAmount > 0 ? Math.min((spent / item.allocatedAmount) * 100, 100) : 0,
+      };
+    });
+    res.json({ budget: { id: budget.id, name: budget.name, startDate: budget.startDate, endDate: budget.endDate }, progress });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Serve static files from React app
 app.use(express.static(path.join(__dirname, '../client/dist')));

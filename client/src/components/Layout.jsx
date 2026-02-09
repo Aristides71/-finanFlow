@@ -13,6 +13,7 @@ export default function Layout({ children }) {
     { path: '/transactions', label: 'Transações', icon: List },
     { path: '/bank-accounts', label: 'Minhas Contas', icon: Wallet },
     { path: '/reports', label: 'Relatórios', icon: FileBarChart },
+    { path: '/budgets', label: 'Orçamento', icon: PieChart },
   ];
 
   const handleLogout = () => {
