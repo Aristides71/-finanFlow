@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getTransactions } from '../services/api';
+import { getTransactions, getBudgets } from '../services/api';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { FileText, Download, Share2, Mail, MessageCircle, X } from 'lucide-react';
@@ -19,6 +19,7 @@ export default function Reports() {
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [emailAddress, setEmailAddress] = useState('');
   const [sendingEmail, setSendingEmail] = useState(false);
+  const [budgetMap, setBudgetMap] = useState({});
 
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -27,8 +28,25 @@ export default function Reports() {
   const generateReport = async () => {
     setLoading(true);
     try {
-      const response = await getTransactions(filters);
-      setTransactions(response.data);
+      const [txRes, budgetsRes] = await Promise.all([
+        getTransactions(filters),
+        getBudgets()
+      ]);
+      setTransactions(txRes.data);
+      const overlaps = Array.isArray(budgetsRes.data)
+        ? budgetsRes.data
+            .filter(b => {
+              const start = new Date(b.startDate);
+              const end = new Date(b.endDate);
+              const fStart = new Date(filters.startDate);
+              const fEnd = new Date(filters.endDate);
+              return start <= fEnd && end >= fStart;
+            })
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        : [];
+      const active = overlaps[0] || null;
+      const map = active ? Object.fromEntries((active.items || []).map(i => [i.category, i.allocatedAmount])) : {};
+      setBudgetMap(map);
     } catch (error) {
       console.error('Error generating report:', error);
     } finally {
@@ -91,7 +109,7 @@ export default function Reports() {
       contentStartY += 6;
     }
 
-    const tableColumn = ["Data", "Descrição", "Categoria", "Receita", "Despesa", "Saldo"];
+    const tableColumn = ["Data", "Descrição", "Categoria", "Orçado", "Receita", "Despesa", "Saldo"];
     const tableRows = [];
 
     let currentBalance = 0;
@@ -113,10 +131,14 @@ export default function Reports() {
         totalExpense += amount;
       }
 
+      const budgeted = t.type === 'EXPENSE' && budgetMap[t.category] !== undefined
+        ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(budgetMap[t.category]))
+        : '-';
       const transactionData = [
         new Date(t.date).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
         t.description,
         t.category,
+        budgeted,
         isIncome ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(amount) : '',
         !isIncome ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(amount) : '',
         new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(currentBalance)
@@ -133,11 +155,11 @@ export default function Reports() {
       head: [tableColumn],
       body: tableRows,
       startY: contentStartY + 10,
-      headStyles: { fillColor: [255, 102, 0] }, // Orange header to match theme
+      headStyles: { fillColor: [255, 102, 0] },
       columnStyles: {
-        3: { halign: 'right', textColor: [22, 163, 74] }, // Receita: green
-        4: { halign: 'right', textColor: [220, 38, 38] }, // Despesa: red
-        5: { halign: 'right', fontStyle: 'bold' }         // Saldo: bold
+        4: { halign: 'right', textColor: [22, 163, 74] },
+        5: { halign: 'right', textColor: [220, 38, 38] },
+        6: { halign: 'right', fontStyle: 'bold' }
       }
     });
 
@@ -377,6 +399,7 @@ export default function Reports() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-orange-800 uppercase tracking-wider">Data</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-orange-800 uppercase tracking-wider">Descrição</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-orange-800 uppercase tracking-wider">Categoria</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-700 uppercase tracking-wider">Orçado</th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-green-700 uppercase tracking-wider">Receita</th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-red-700 uppercase tracking-wider">Despesa</th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-blue-700 uppercase tracking-wider">Saldo</th>
@@ -393,6 +416,9 @@ export default function Reports() {
                     const amount = Number(t.amount);
                     if (isIncome) currentBalance += amount;
                     else currentBalance -= amount;
+                    const budgeted = t.type === 'EXPENSE' && budgetMap[t.category] !== undefined
+                      ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(budgetMap[t.category]))
+                      : '-';
 
                     return (
                       <tr key={t.id} className="hover:bg-gray-50">
@@ -404,6 +430,9 @@ export default function Reports() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {t.category}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-700">
+                          {budgeted}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-green-600 font-medium">
                           {isIncome ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(amount) : '-'}
