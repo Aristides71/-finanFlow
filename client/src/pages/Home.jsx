@@ -56,6 +56,52 @@ export default function Home() {
         </div>
       </main>
 
+      <section id="pricing" className="py-16 bg-white">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-gray-900">Planos e Preços</h2>
+            <p className="text-gray-600 mt-2">Escolha o plano ideal para seu momento. Você pode começar com teste grátis.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="border border-gray-200 rounded-xl p-6 shadow-sm">
+              <h3 className="text-xl font-bold text-gray-900">Básico</h3>
+              <p className="text-3xl font-extrabold text-blue-600 mt-2">R$ 0</p>
+              <p className="text-gray-500 text-sm">Teste grátis (3 dias)</p>
+              <ul className="mt-4 space-y-2 text-sm text-gray-700">
+                <li>• Cadastro de receitas e despesas</li>
+                <li>• Exportação PDF simples</li>
+                <li>• Acesso mobile</li>
+              </ul>
+              <Link to="/register" className="mt-6 inline-block w-full text-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Começar</Link>
+            </div>
+            <div className="border-2 border-blue-300 rounded-xl p-6 shadow-md">
+              <h3 className="text-xl font-bold text-gray-900">Profissional</h3>
+              <p className="text-3xl font-extrabold text-blue-600 mt-2">R$ 29/mês</p>
+              <p className="text-gray-500 text-sm">Para uso diário</p>
+              <ul className="mt-4 space-y-2 text-sm text-gray-700">
+                <li>• Tudo do Básico</li>
+                <li>• Orçamento por categoria</li>
+                <li>• Relatórios avançados com logo</li>
+                <li>• Suporte prioritário</li>
+              </ul>
+              <Link to="/register" className="mt-6 inline-block w-full text-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Assinar</Link>
+            </div>
+            <div className="border border-gray-200 rounded-xl p-6 shadow-sm">
+              <h3 className="text-xl font-bold text-gray-900">Empresarial</h3>
+              <p className="text-3xl font-extrabold text-blue-600 mt-2">R$ 59/mês</p>
+              <p className="text-gray-500 text-sm">Para equipes</p>
+              <ul className="mt-4 space-y-2 text-sm text-gray-700">
+                <li>• Tudo do Profissional</li>
+                <li>• Múltiplas contas</li>
+                <li>• Exportações personalizadas</li>
+                <li>• Onboarding assistido</li>
+              </ul>
+              <Link to="/register" className="mt-6 inline-block w-full text-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Falar com vendas</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <footer className="p-6 text-center text-gray-500 text-sm">
         © 2026 Finance Manager. Todos os direitos reservados.
       </footer>
