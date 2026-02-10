@@ -23,6 +23,7 @@ model User {
   bankAccounts       BankAccount[]
   subscriptions      Subscription[]
   budgets            Budget[]
+  categories         Category[]
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
 }
@@ -89,4 +90,14 @@ model BudgetItem {
   allocatedAmount Float
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([userId, name])
 }
