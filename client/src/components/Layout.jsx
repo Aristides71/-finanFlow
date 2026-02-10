@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, List, FileBarChart, PieChart, LogOut, Wallet } from 'lucide-react';
+import { LayoutDashboard, List, FileBarChart, PieChart, LogOut, Wallet, Tag } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Layout({ children }) {
@@ -14,6 +14,7 @@ export default function Layout({ children }) {
     { path: '/bank-accounts', label: 'Minhas Contas', icon: Wallet },
     { path: '/reports', label: 'Relatórios', icon: FileBarChart },
     { path: '/budgets', label: 'Orçamento', icon: PieChart },
+    { path: '/categories', label: 'Categorias', icon: Tag },
   ];
 
   const handleLogout = () => {

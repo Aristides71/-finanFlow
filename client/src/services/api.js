@@ -46,5 +46,7 @@ export const getBudgetProgress = (id) => api.get(`/budgets/${id}/progress`);
 // Categories Services
 export const getCategories = () => api.get('/categories');
 export const createCategoryApi = (name) => api.post('/categories', { name });
+export const updateCategoryApi = (id, name) => api.put(`/categories/${id}`, { name });
+export const deleteCategoryApi = (id) => api.delete(`/categories/${id}`);
 
 export default api;

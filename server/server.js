@@ -385,10 +385,11 @@ app.post('/api/budgets', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const { name, startDate, endDate, items } = req.body;
+    const budgetName = (name && String(name).trim()) ? String(name).trim() : `Orçamento ${new Date(startDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' })} a ${new Date(endDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}`;
     const budget = await prisma.budget.create({
       data: {
         userId,
-        name,
+        name: budgetName,
         startDate: new Date(startDate),
         endDate: new Date(endDate),
         items: {
@@ -477,6 +478,37 @@ app.post('/api/categories', authenticateToken, async (req, res) => {
       create: { userId, name: String(name).trim() }
     });
     res.json(cat);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.put('/api/categories/:id', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const id = parseInt(req.params.id);
+    const { name } = req.body;
+    if (!name || !String(name).trim()) return res.status(400).json({ error: 'Name required' });
+    const existing = await prisma.category.findUnique({ where: { id } });
+    if (!existing || existing.userId !== userId) return res.status(403).json({ error: 'Not authorized' });
+    const updated = await prisma.category.update({
+      where: { id },
+      data: { name: String(name).trim(), updatedAt: new Date() }
+    });
+    res.json(updated);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/categories/:id', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const id = parseInt(req.params.id);
+    const existing = await prisma.category.findUnique({ where: { id } });
+    if (!existing || existing.userId !== userId) return res.status(403).json({ error: 'Not authorized' });
+    await prisma.category.delete({ where: { id } });
+    res.json({ message: 'Category deleted' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

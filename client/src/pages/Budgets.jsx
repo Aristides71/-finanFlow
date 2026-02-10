@@ -60,14 +60,12 @@ export default function Budgets() {
     setLoading(true);
     try {
       const data = {
-        name: form.name,
         startDate: form.startDate,
         endDate: form.endDate,
         items: form.items.map(i => ({ category: i.category, allocatedAmount: parseFloat(i.allocatedAmount || 0) })),
       };
       await createBudget(data);
       setForm({
-        name: '',
         startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0],
         endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toISOString().split('T')[0],
         items: [{ category: '', allocatedAmount: '' }],
@@ -93,10 +91,6 @@ export default function Budgets() {
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Criar Orçamento</h2>
         <form onSubmit={submitBudget} className="space-y-4">
           <div className="grid md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
-              <input name="name" value={form.name} onChange={onFormChange} className="w-full p-2 border border-gray-300 rounded-lg" required />
-            </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Início</label>
               <input type="date" name="startDate" value={form.startDate} onChange={onFormChange} className="w-full p-2 border border-gray-300 rounded-lg" required />
