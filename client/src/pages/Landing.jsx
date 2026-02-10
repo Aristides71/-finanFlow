@@ -1,14 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle, PieChart, Shield, Smartphone } from 'lucide-react';
-import newLogo from '../../Consultancy Logo Blue Balance with Overlapping Circles.png';
 
 export default function Landing() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 flex flex-col">
       <header className="p-6 flex justify-between items-center max-w-7xl mx-auto w-full">
         <div className="flex items-center gap-2">
-           <img src={newLogo} alt="Logo" className="w-28 h-28 md:w-44 md:h-44 object-contain" />
+           <img src="/logo.png" alt="Logo" className="w-28 h-28 md:w-44 md:h-44 object-contain" />
         </div>
         <div className="space-x-4">
           <Link to="/login" className="text-gray-600 hover:text-orange-600 font-medium">Login</Link>
