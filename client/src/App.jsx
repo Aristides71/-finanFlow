@@ -9,6 +9,7 @@ import BankAccounts from './pages/BankAccounts';
 import Budgets from './pages/Budgets';
 import Categories from './pages/Categories';
 import Landing from './pages/Landing';
+import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 
@@ -46,6 +47,13 @@ const PublicRoute = ({ children }) => {
     return children;
 }
 
+function RootRoute() {
+  const { user, loading } = useAuth();
+  if (loading) return null;
+  if (user) return <Layout><Dashboard /></Layout>;
+  return <Home />;
+}
+
 function App() {
   return (
     <AuthProvider>
@@ -55,7 +63,7 @@ function App() {
           <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
           <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
           
-          <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/" element={<RootRoute />} />
           <Route path="/transactions" element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
           <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
           <Route path="/bank-accounts" element={<ProtectedRoute><BankAccounts /></ProtectedRoute>} />
