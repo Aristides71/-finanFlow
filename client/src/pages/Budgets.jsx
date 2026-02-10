@@ -101,7 +101,21 @@ export default function Budgets() {
               <div key={idx} className="grid md:grid-cols-3 gap-3 items-end">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
-                  <input value={item.category} onChange={(e) => onItemChange(idx, 'category', e.target.value)} className="w-full p-2 border border-gray-300 rounded-lg" placeholder="Ex: Alimentação" required />
+                  <input
+                    value={item.category}
+                    onChange={(e) => onItemChange(idx, 'category', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-lg"
+                    placeholder="Ex: Alimentação"
+                    list="budget-categories"
+                    required
+                  />
+                  <datalist id="budget-categories">
+                    <option value="Alimentação" />
+                    <option value="Transporte" />
+                    <option value="Salário" />
+                    <option value="Vendas" />
+                    <option value="Contas" />
+                  </datalist>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Valor Planejado</label>
