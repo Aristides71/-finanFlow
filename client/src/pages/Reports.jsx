@@ -64,6 +64,32 @@ export default function Reports() {
       const response = await fetch('/logo.png');
       if (!response.ok) throw new Error('Logo not found');
       const blob = await response.blob();
+      const processed = await new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const data = imageData.data;
+          const opacityFactor = 0.4; // soften logo for PDF
+          for (let i = 0; i < data.length; i += 4) {
+            const r = data[i], g = data[i + 1], b = data[i + 2];
+            if (r > 245 && g > 245 && b > 245) {
+              data[i + 3] = 0; // remove white background
+            } else {
+              data[i + 3] = Math.floor(data[i + 3] * opacityFactor); // reduce opacity
+            }
+          }
+          ctx.putImageData(imageData, 0, 0);
+          resolve(canvas.toDataURL('image/png'));
+        };
+        img.onerror = () => resolve(null);
+        img.src = URL.createObjectURL(blob);
+      });
+      if (processed) return processed;
       return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onloadend = () => resolve(reader.result);
