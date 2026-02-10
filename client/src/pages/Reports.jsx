@@ -186,7 +186,7 @@ export default function Reports() {
       head: [tableColumn],
       body: tableRows,
       startY: contentStartY + 10,
-      headStyles: { fillColor: [255, 102, 0] },
+      headStyles: { fillColor: [37, 99, 235] },
       columnStyles: {
         4: { halign: 'right', textColor: [22, 163, 74] },
         5: { halign: 'right', textColor: [220, 38, 38] },
@@ -425,11 +425,11 @@ export default function Reports() {
 
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-orange-50">
+              <thead className="bg-blue-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-orange-800 uppercase tracking-wider">Data</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-orange-800 uppercase tracking-wider">Descrição</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-orange-800 uppercase tracking-wider">Categoria</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-800 uppercase tracking-wider">Data</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-800 uppercase tracking-wider">Descrição</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-800 uppercase tracking-wider">Categoria</th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-700 uppercase tracking-wider">Orçado</th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-green-700 uppercase tracking-wider">Receita</th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-red-700 uppercase tracking-wider">Despesa</th>

@@ -27,7 +27,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-orange-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4">
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-gray-800">Bem-vindo de volta</h2>
@@ -49,7 +49,7 @@ export default function Login() {
                 type="email"
                 name="email"
                 required
-                className="pl-10 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
+                className="pl-10 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                 placeholder="seu@email.com"
                 value={formData.email}
                 onChange={handleChange}
@@ -65,7 +65,7 @@ export default function Login() {
                 type="password"
                 name="password"
                 required
-                className="pl-10 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
+                className="pl-10 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                 placeholder="******"
                 value={formData.password}
                 onChange={handleChange}
@@ -75,7 +75,7 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full bg-orange-600 text-white py-3 rounded-lg font-bold hover:bg-orange-700 transition shadow-lg mt-6"
+            className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition shadow-lg mt-6"
           >
             Entrar
           </button>
@@ -83,7 +83,7 @@ export default function Login() {
 
         <p className="text-center mt-6 text-sm text-gray-600">
           Não tem uma conta?{' '}
-          <Link to="/register" className="text-orange-600 font-bold hover:underline">
+          <Link to="/register" className="text-blue-600 font-bold hover:underline">
             Teste Grátis
           </Link>
         </p>

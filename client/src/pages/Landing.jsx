@@ -4,14 +4,14 @@ import { ArrowRight, CheckCircle, PieChart, Shield, Smartphone } from 'lucide-re
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex flex-col">
       <header className="p-6 flex justify-between items-center max-w-7xl mx-auto w-full">
         <div className="flex items-center gap-2">
            <img src="/logo.png" alt="Logo" className="w-28 h-28 md:w-44 md:h-44 object-contain mix-blend-multiply" />
         </div>
         <div className="space-x-4">
-          <Link to="/login" className="text-gray-600 hover:text-orange-600 font-medium">Login</Link>
-          <Link to="/register" className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition shadow-lg">
+          <Link to="/login" className="text-gray-600 hover:text-blue-600 font-medium">Login</Link>
+          <Link to="/register" className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition shadow-lg">
             Teste Grátis
           </Link>
         </div>
@@ -19,14 +19,14 @@ export default function Landing() {
 
       <main className="flex-1 flex flex-col items-center justify-center text-center p-6 max-w-4xl mx-auto">
         <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
-          Gerencie suas finanças com <span className="text-orange-500">Inteligência</span>
+          Gerencie suas finanças com <span className="text-blue-600">Inteligência</span>
         </h1>
         <p className="text-xl text-gray-600 mb-10 max-w-2xl">
           A solução completa para PMEs e Pessoas Físicas. Controle receitas, despesas e gere relatórios detalhados em segundos.
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 mb-16">
-          <Link to="/register" className="bg-orange-600 text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-orange-700 transition shadow-xl flex items-center justify-center gap-2">
+          <Link to="/register" className="bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-blue-700 transition shadow-xl flex items-center justify-center gap-2">
             Começar Teste de 3 Dias <ArrowRight className="w-5 h-5" />
           </Link>
           <Link to="/login" className="bg-white text-gray-700 px-8 py-4 rounded-full text-lg font-bold hover:bg-gray-50 transition shadow-md border border-gray-200">
@@ -36,7 +36,7 @@ export default function Landing() {
 
         <div className="grid md:grid-cols-3 gap-8 text-left w-full">
           <div className="bg-white p-6 rounded-xl shadow-md">
-            <PieChart className="w-10 h-10 text-orange-500 mb-4" />
+            <PieChart className="w-10 h-10 text-blue-600 mb-4" />
             <h3 className="text-xl font-bold mb-2">Relatórios Completos</h3>
             <p className="text-gray-600">Exporte demonstrativos em PDF estilo Livro Caixa e acompanhe gráficos interativos.</p>
           </div>

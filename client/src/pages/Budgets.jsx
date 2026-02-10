@@ -130,7 +130,7 @@ export default function Budgets() {
             </button>
           </div>
 
-          <button type="submit" disabled={loading} className="bg-orange-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-orange-700 transition">
+          <button type="submit" disabled={loading} className="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition">
             {loading ? 'Salvando...' : 'Salvar Orçamento'}
           </button>
         </form>

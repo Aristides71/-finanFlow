@@ -25,10 +25,10 @@ export default function Layout({ children }) {
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
-      <div className="w-64 bg-gradient-to-b from-orange-200 to-orange-300 shadow-lg hidden md:block text-orange-900 flex flex-col">
-        <div className="p-6 flex flex-col items-center gap-2 border-b border-orange-900/10">
+      <div className="w-64 bg-gradient-to-b from-blue-200 to-blue-300 shadow-lg hidden md:block text-blue-900 flex flex-col">
+        <div className="p-6 flex flex-col items-center gap-2 border-b border-blue-900/10">
           <img src="/logo.png" alt="Logo" className="w-44 h-44 object-contain mix-blend-multiply" />
-          {user && <span className="text-sm font-medium text-orange-900 mt-2">Olá, {user.name}</span>}
+          {user && <span className="text-sm font-medium text-blue-900 mt-2">Olá, {user.name}</span>}
         </div>
         
         <nav className="mt-6 px-4 space-y-2 flex-1">
@@ -41,8 +41,8 @@ export default function Layout({ children }) {
                 to={item.path}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                   isActive
-                    ? 'bg-white/60 text-orange-900 font-medium'
-                    : 'text-orange-800 hover:bg-white/40 hover:text-orange-900'
+                    ? 'bg-white/60 text-blue-900 font-medium'
+                    : 'text-blue-800 hover:bg-white/40 hover:text-blue-900'
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -52,10 +52,10 @@ export default function Layout({ children }) {
           })}
         </nav>
 
-        <div className="p-4 border-t border-orange-900/10">
+        <div className="p-4 border-t border-blue-900/10">
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-orange-800 hover:bg-white/40 hover:text-orange-900 transition-colors"
+            className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-blue-800 hover:bg-white/40 hover:text-blue-900 transition-colors"
           >
             <LogOut className="w-5 h-5" />
             Sair
@@ -66,15 +66,15 @@ export default function Layout({ children }) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Mobile Header */}
-        <div className="md:hidden bg-gradient-to-r from-orange-200 to-orange-300 shadow-sm p-4 flex justify-between items-center">
+        <div className="md:hidden bg-gradient-to-r from-blue-200 to-blue-300 shadow-sm p-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
              <img src="/logo.png" alt="Logo" className="w-28 h-28 object-contain mix-blend-multiply" />
           </div>
           <div className="flex flex-col items-center">
-            <button onClick={handleLogout} className="text-orange-900">
+            <button onClick={handleLogout} className="text-blue-900">
               <LogOut className="w-6 h-6" />
             </button>
-            {user && <span className="text-xs font-medium text-orange-900 mt-1">{user.name}</span>}
+            {user && <span className="text-xs font-medium text-blue-900 mt-1">{user.name}</span>}
           </div>
         </div>
 
@@ -100,7 +100,7 @@ export default function Layout({ children }) {
         </main>
 
         {/* Mobile Bottom Nav */}
-        <div className="md:hidden bg-white border-t border-gray-200 flex justify-around p-3">
+        <div className="md-hidden bg-white border-t border-gray-200 flex justify-around p-3">
            {navItems.map((item) => {
              const Icon = item.icon;
              const isActive = location.pathname === item.path;
@@ -108,7 +108,7 @@ export default function Layout({ children }) {
                <Link
                  key={item.path}
                  to={item.path}
-                 className={`flex flex-col items-center gap-1 text-xs ${isActive ? 'text-orange-600' : 'text-gray-500'}`}
+                 className={`flex flex-col items-center gap-1 text-xs ${isActive ? 'text-blue-600' : 'text-gray-500'}`}
                >
                  <Icon className="w-6 h-6" />
                  {item.label}
