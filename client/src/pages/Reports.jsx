@@ -4,6 +4,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { FileText, Download, Share2, Mail, MessageCircle, X } from 'lucide-react';
 import axios from '../services/api';
+import newLogo from '../../Consultancy Logo Blue Balance with Overlapping Circles.png';
 
 export default function Reports() {
   const [filters, setFilters] = useState({
@@ -61,7 +62,7 @@ export default function Reports() {
 
   const getLogoBase64 = async () => {
     try {
-      const response = await fetch('/logo.png');
+      const response = await fetch(newLogo);
       if (!response.ok) throw new Error('Logo not found');
       const blob = await response.blob();
       return new Promise((resolve) => {
@@ -70,8 +71,19 @@ export default function Reports() {
         reader.readAsDataURL(blob);
       });
     } catch (error) {
-      console.warn("Logo loading failed, continuing without logo:", error);
-      return null;
+      try {
+        const response = await fetch('/logo.png');
+        if (!response.ok) throw new Error('Logo not found');
+        const blob = await response.blob();
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(blob);
+        });
+      } catch (err2) {
+        console.warn("Logo loading failed, continuing without logo:", err2);
+        return null;
+      }
     }
   };
 
