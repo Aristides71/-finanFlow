@@ -157,6 +157,15 @@ app.post('/api/transactions', authenticateToken, async (req, res) => {
         bankAccountId: bankAccountId ? parseInt(bankAccountId) : null
       },
     });
+    try {
+      if (category && category.trim()) {
+        await prisma.category.upsert({
+          where: { userId_name: { userId, name: category.trim() } },
+          update: { updatedAt: new Date() },
+          create: { userId, name: category.trim() }
+        });
+      }
+    } catch (_) {}
     
     res.json(transaction);
   } catch (error) {
@@ -391,6 +400,14 @@ app.post('/api/budgets', authenticateToken, async (req, res) => {
       },
       include: { items: true },
     });
+    try {
+      const cats = Array.from(new Set((items || []).map(i => String(i.category || '').trim()).filter(Boolean)));
+      await Promise.all(cats.map(cat => prisma.category.upsert({
+        where: { userId_name: { userId, name: cat } },
+        update: { updatedAt: new Date() },
+        create: { userId, name: cat }
+      })));
+    } catch (_) {}
     res.json(budget);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -431,6 +448,35 @@ app.get('/api/budgets/:id/progress', authenticateToken, async (req, res) => {
       };
     });
     res.json({ budget: { id: budget.id, name: budget.name, startDate: budget.startDate, endDate: budget.endDate }, progress });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/categories', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const categories = await prisma.category.findMany({
+      where: { userId },
+      orderBy: { name: 'asc' }
+    });
+    res.json(categories);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/categories', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { name } = req.body;
+    if (!name || !String(name).trim()) return res.status(400).json({ error: 'Name required' });
+    const cat = await prisma.category.upsert({
+      where: { userId_name: { userId, name: String(name).trim() } },
+      update: { updatedAt: new Date() },
+      create: { userId, name: String(name).trim() }
+    });
+    res.json(cat);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

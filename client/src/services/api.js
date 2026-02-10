@@ -43,4 +43,8 @@ export const getBudgets = () => api.get('/budgets');
 export const createBudget = (data) => api.post('/budgets', data);
 export const getBudgetProgress = (id) => api.get(`/budgets/${id}/progress`);
 
+// Categories Services
+export const getCategories = () => api.get('/categories');
+export const createCategoryApi = (name) => api.post('/categories', { name });
+
 export default api;

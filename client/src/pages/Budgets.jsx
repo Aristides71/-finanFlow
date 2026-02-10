@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getBudgets, createBudget, getBudgetProgress } from '../services/api';
+import { getBudgets, createBudget, getBudgetProgress, getCategories } from '../services/api';
 import { Plus, BarChart2 } from 'lucide-react';
 
 export default function Budgets() {
@@ -13,9 +13,11 @@ export default function Budgets() {
     endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toISOString().split('T')[0],
     items: [{ category: '', allocatedAmount: '' }],
   });
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     loadBudgets();
+    loadCategories();
   }, []);
 
   const loadBudgets = async () => {
@@ -23,6 +25,15 @@ export default function Budgets() {
       const res = await getBudgets();
       setBudgets(res.data);
     } catch (err) {}
+  };
+  
+  const loadCategories = async () => {
+    try {
+      const res = await getCategories();
+      const defaults = ["Alimentação","Transporte","Salário","Vendas","Contas"];
+      const names = Array.from(new Set([...(res.data || []).map(c => c.name), ...defaults]));
+      setCategories(names);
+    } catch {}
   };
 
   const onFormChange = (e) => {
@@ -106,15 +117,11 @@ export default function Budgets() {
                     onChange={(e) => onItemChange(idx, 'category', e.target.value)}
                     className="w-full p-2 border border-gray-300 rounded-lg"
                     placeholder="Ex: Alimentação"
-                    list="budget-categories"
+                    list="app-categories"
                     required
                   />
-                  <datalist id="budget-categories">
-                    <option value="Alimentação" />
-                    <option value="Transporte" />
-                    <option value="Salário" />
-                    <option value="Vendas" />
-                    <option value="Contas" />
+                  <datalist id="app-categories">
+                    {categories.map(name => (<option key={name} value={name} />))}
                   </datalist>
                 </div>
                 <div>

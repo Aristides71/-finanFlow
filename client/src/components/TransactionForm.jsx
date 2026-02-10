@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { createTransaction, getBankAccounts } from '../services/api';
+import { createTransaction, getBankAccounts, getCategories, createCategoryApi } from '../services/api';
 
 export default function TransactionForm({ onSuccess }) {
   const [formData, setFormData] = useState({
@@ -12,9 +12,11 @@ export default function TransactionForm({ onSuccess }) {
   });
   
   const [accounts, setAccounts] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     fetchAccounts();
+    fetchCategories();
   }, []);
 
   const fetchAccounts = async () => {
@@ -28,6 +30,15 @@ export default function TransactionForm({ onSuccess }) {
     } catch (error) {
       console.error('Error fetching accounts:', error);
     }
+  };
+  
+  const fetchCategories = async () => {
+    try {
+      const res = await getCategories();
+      const defaults = ["Alimentação","Transporte","Salário","Vendas","Contas"];
+      const names = Array.from(new Set([...(res.data || []).map(c => c.name), ...defaults]));
+      setCategories(names);
+    } catch {}
   };
 
   const handleChange = (e) => {
@@ -116,20 +127,30 @@ export default function TransactionForm({ onSuccess }) {
           <input
             type="text"
             name="category"
-            list="categories"
+            list="app-categories"
             value={formData.category}
             onChange={handleChange}
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 border"
             placeholder="Ex: Alimentação, Vendas"
           />
-          <datalist id="categories">
-            <option value="Alimentação" />
-            <option value="Transporte" />
-            <option value="Salário" />
-            <option value="Vendas" />
-            <option value="Contas" />
+          <datalist id="app-categories">
+            {categories.map(name => (<option key={name} value={name} />))}
           </datalist>
+          <div className="mt-2">
+            <button
+              type="button"
+              onClick={async () => {
+                if (formData.category && !categories.includes(formData.category)) {
+                  await createCategoryApi(formData.category);
+                  await fetchCategories();
+                }
+              }}
+              className="text-xs text-indigo-600 hover:underline"
+            >
+              Adicionar categoria
+            </button>
+          </div>
         </div>
 
         <div>
